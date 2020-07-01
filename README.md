@@ -1,7 +1,5 @@
 # TensorFlowLearning
 TensorFlow learning resources
 
-colab notebooks from the 'TensorFlow in Practice' Deeplearning.ai course
-
-personal summaries and practice notebooks
+personal summaries and practice notebooks based on learnings from 'TensorFlow in Practice' Deeplearning.ai course
 
