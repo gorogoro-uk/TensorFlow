@@ -25,11 +25,11 @@ mnist_acc_callback = accCallBack()
 
 # model definition
 mnist_model = tf.keras.models.Sequential([
-    tf.keras.layers.Conv2D(32, (3,3), input_shape=(28, 28, 1), activation='relu'),
-    tf.keras.layers.MaxPooling2D(2,2),
-    tf.keras.layers.Flatten(),
-    tf.keras.layers.Dense(500, activation='relu'),
-    tf.keras.layers.Dense(10, activation='softmax'),
+    tf.keras.layers.Conv2D(32, (3,3), input_shape=(28, 28, 1), activation='relu'),  # output: [60000, 26, 26, 32]
+    tf.keras.layers.MaxPooling2D(2,2),                                              # output: [60000, 13, ,13, 32]
+    tf.keras.layers.Flatten(),                                                      # output: [60000, 5408]
+    tf.keras.layers.Dense(500, activation='relu'),                                  # output: [60000, 500]
+    tf.keras.layers.Dense(10, activation='softmax'),                                # output: [60000, 10]
 ])
 mnist_model.summary()
 
