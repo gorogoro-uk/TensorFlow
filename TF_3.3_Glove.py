@@ -78,7 +78,7 @@ train_seqs = train_tokenizer.texts_to_sequences(sentences)
 train_pad_seqs = pad_sequences(train_seqs, maxlen=max_length, padding=pad_type, truncating=trunc_type)
 print("\nTokenize ok\n")
 
-# split inot train / test & convert to numpy
+# split into train / test & convert to numpy
 split = int(test_ratio * train_size)
 train_data = np.array(train_pad_seqs[split:train_size])
 train_labels = np.array(labels[split:train_size])
@@ -120,20 +120,22 @@ print(len(embed_matrix))
 print("\nGlove data prep ok\n")
 
 # define model
+# input: [160000, 16] [batch_size, sentence_length]
 glove_model = tf.keras.Sequential([
     tf.keras.layers.Embedding(vocab_size+1, embed_dim, input_length=max_length, weights=[embed_matrix], trainable=False),
-    tf.keras.layers.Dropout(0.2),
-    tf.keras.layers.Conv1D(64, 5, activation='relu'),
-    tf.keras.layers.MaxPooling1D(pool_size=4),
-    tf.keras.layers.LSTM(64),
-    tf.keras.layers.Dense(1, activation='sigmoid')
+                                                            # output: [160000, 16, 100]
+    tf.keras.layers.Dropout(0.2),                           # output: [160000, 16, 100]
+    tf.keras.layers.Conv1D(64, 5, activation='relu'),       # output: [160000, 12, 64]
+    tf.keras.layers.MaxPooling1D(pool_size=4),              # output: [160000, 3, 64] stride=4
+    tf.keras.layers.LSTM(64),                               # output: [160000, 64] num_units
+    tf.keras.layers.Dense(1, activation='sigmoid')          # output: [160000, 1]
 ])
 glove_model.compile(loss='binary_crossentropy',optimizer='adam',metrics=['accuracy'])
 glove_model.summary()
 
 # fit model
 glove_model_hist = glove_model.fit(train_data, train_labels,
-                    epochs=50,
+                    epochs=25,
                     validation_data=(test_data, test_labels),
                     verbose=2)
 print("\nTraining Complete\n")
@@ -161,4 +163,4 @@ plt.xlabel("Epochs")
 plt.ylabel("Loss")
 plt.legend(["Loss", "Validation Loss"])
 plt.figure()
-
+plt.show()
